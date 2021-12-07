@@ -1,0 +1,17 @@
+# Run mysql docker container enabling default ports to be accessed by localhost and a user.
+docker run --name=testing-mysql --env="MYSQL_ROOT_PASSWORD=pass123" -p 3306:3306 -d mysql:latest
+
+# To drop into a bash shell in a docker container
+docker exec -it testing-mysql bash
+
+# Create projects table
+CREATE TABLE projects(project_id INT(11) NOT NULL AUTO_INCREMENT, title
+VARCHAR(30), description VARCHAR(255), PRIMARY KEY(project_id));
+
+# Create tasks table linked by FK to projects table
+CREATE TABLE tasks(task_id INT(11) NOT NULL AUTO_INCREMENT,
+project_id(11) NOT NULL, description VARCHAR(255), PRIMARY KEY(project_id)
+REFERENCES projects(project_id));
+
+# Add some items to both tables:
+INSERT INTO projects(title, description) VALUES ("bla", "bla");
