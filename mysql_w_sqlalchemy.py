@@ -1,5 +1,5 @@
 """
-sqlalchemy will not create the database, only connect to it.
+sqlalchemy core will not create the database, only connect to it.
 """
 import sqlalchemy as db
 from pprint import PrettyPrinter
