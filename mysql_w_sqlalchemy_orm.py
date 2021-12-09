@@ -25,6 +25,7 @@ engine = create_engine(connection_str, echo=True)
 Base = declarative_base()
 
 
+# Create db objects (tables) using the ORM.
 class Project(Base):
     __tablename__ = "projects"
     __table_args__ = {"schema": "household"}
@@ -52,3 +53,31 @@ class Task(Base):
 
 
 Base.metadata.create_all(engine)
+
+# create a new session to be able to query/transact
+session_maker = sessionmaker()
+session_maker.configure(bind=engine)
+session = session_maker()
+
+# Enter new entries
+organize_closet_project = Project(title="Organize closet", description="Try to get things organized in there.")
+session.add(organize_closet_project)
+session.commit()  # This saves changes to db, so project_id in the tasks gets initialized.
+
+# Create tasks to associate with a household project.
+tasks = [
+    Task(project_id=organize_closet_project.project_id, description="Sweep the nasty floor."),
+    Task(project_id=organize_closet_project.project_id, description="Mop that swept floor."),
+    Task(project_id=organize_closet_project.project_id, description="Order things around.")
+]
+
+# Save multiple entries at once.
+session.bulk_save_objects(tasks)
+session.commit()
+
+# Query entries
+projects = session.query(Project).filter_by(title="Organize closet").first()
+print(projects)
+
+tasks_query = session.query(Task).all()
+print(tasks_query)
