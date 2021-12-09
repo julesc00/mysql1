@@ -8,6 +8,9 @@ docker exec -it testing-mysql bash
 CREATE TABLE projects(project_id INT(11) NOT NULL AUTO_INCREMENT, title
 VARCHAR(30), description VARCHAR(255), PRIMARY KEY(project_id));
 
+# Grant rights to db user
+GRANT ALL PRIVILEGES ON landon.* to 'charbel'@'%';
+
 # Create tasks table linked by FK to projects table
 CREATE TABLE tasks(task_id INT(11) NOT NULL AUTO_INCREMENT,
 project_id(11) NOT NULL, description VARCHAR(255), PRIMARY KEY(project_id)
